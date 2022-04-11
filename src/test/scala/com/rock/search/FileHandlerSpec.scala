@@ -7,14 +7,10 @@ import org.scalatest.wordspec.AnyWordSpec
 import FileHelper._
 import com.rock.search.engine.NormalizedWord
 import com.rock.search.file.FileHandler.{DirectoryNotFound, MissingPathArgument, NotADirectory}
-import com.test.search.engine.NormalizedWord
-
+import TestDataProvider._
 import java.io.File
 
 class FileHandlerSpec extends AnyWordSpec with Matchers with EitherValues with OptionValues with BeforeAndAfterEach {
-
-  private val testDirectoryPath = "src/test/resources"
-  private val textFileExtension = ".txt"
 
   "FileHandler's getDirectory() method" should {
 

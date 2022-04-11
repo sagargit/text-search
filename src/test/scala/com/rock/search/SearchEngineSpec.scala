@@ -1,19 +1,13 @@
 package com.rock.search
 
 import com.rock.search.engine.{FileScore, InvertedIndexRecord, NormalizedWord, SearchContext, SearchInput}
-import com.test.search.engine.NormalizedWord
 import org.scalatest.{BeforeAndAfterEach, EitherValues, OptionValues}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import com.rock.search.engine.SearchEngine._
+import TestDataProvider._
 
 class SearchEngineSpec extends AnyWordSpec with Matchers with EitherValues with OptionValues with BeforeAndAfterEach {
-
-  type FileName = String
-  type Words    = List[String]
-
-  val testFiles: Map[FileName, Words] =
-    Map("file1" -> List("word1", "word3"), "file2" -> List("word1", "word2", "word4"), "file3" -> List("word3"))
 
   "Search Engine's index() method" should {
 
@@ -144,23 +138,5 @@ class SearchEngineSpec extends AnyWordSpec with Matchers with EitherValues with 
 
   private lazy val testInvertedIndex   = produceInvertedIndex(testFiles)
   private lazy val testNormalizedWords = produceNormalizedWords(testFiles)
-
-  private def produceInvertedIndex(testFiles: Map[String, Words]): List[InvertedIndexRecord] = {
-    testFiles.toList
-      .flatMap {
-        case (fileName, words) => words.map((_, fileName))
-      }
-      .groupBy(_._1)
-      .map {
-        case (word, wordFileNamesPair) => InvertedIndexRecord(word, wordFileNamesPair.map(_._2).toSet)
-      }
-      .toList
-  }
-
-  private def produceNormalizedWords(testFiles: Map[String, Words]): List[NormalizedWord] = {
-    testFiles.flatMap {
-      case (fileName, words) => words.map(NormalizedWord(_, fileName))
-    }.toList
-  }
 
 }
