@@ -2,8 +2,8 @@
 The application provides a **Text Search Console** to search text inputs from files.
 
 `TextSearchApp.scala` is the entrypoint to the application. While running this file, path to a directory containing text 
-files must be passed as command line arguments. The program then looks inside all the files contained in the directory
-and processed them to serve search requests.
+files must be passed as command line arguments. The program looks inside all the files contained in that directory
+and processes them so that search requests could be handled.
 
 This project has `test_directory` folder with some test files. So, it can be used as directory path while running the
 application.
