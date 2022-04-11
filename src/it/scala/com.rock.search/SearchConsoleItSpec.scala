@@ -3,18 +3,12 @@ package com.rock.search
 import com.rock.search.SearchConsoleManager._
 import com.rock.search.TestDataProvider._
 import com.rock.search.engine.{InvertedIndexRecord, SearchContext}
-import org.scalatest.{BeforeAndAfterEach, EitherValues, OptionValues}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.io.{ByteArrayOutputStream, StringReader}
 
-class SearchConsoleItSpec
-    extends AnyWordSpec
-    with Matchers
-    with EitherValues
-    with OptionValues
-    with BeforeAndAfterEach {
+class SearchConsoleItSpec extends AnyWordSpec with Matchers {
 
   "Search Console" should {
     "successfully read search `word` as input from Console and print the results back" in {
