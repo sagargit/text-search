@@ -1,5 +1,7 @@
 package com.rock.search.engine
 
+import com.rock.search.engine.ComparisonType.{Contains, Equals, StartsWith}
+
 /**
  * Model used to represent Search Relevance through Comparison operators for search inputs.
  * Each Comparison type is associated with a score between 100 to 0, 100 being complete match and 0 being no match.
@@ -22,7 +24,7 @@ package com.rock.search.engine
  */
 sealed abstract class ComparisonType(_point: Int) {
   val point = _point
-  protected def matchCriteria(inputWord: String, record: InvertedIndexRecord): Boolean
+  def matchCriteria(inputWord: String, record: InvertedIndexRecord): Boolean
   def getMatchedRecords(inputWord: String, searchContext: SearchContext): List[InvertedIndexRecord]
 }
 
@@ -38,10 +40,7 @@ object ComparisonType {
 
   case object StartsWith extends ComparisonType(90) {
     override def matchCriteria(inputWord: String, record: InvertedIndexRecord): Boolean = {
-      (inputWord.startsWith(record.word) || record.word.startsWith(inputWord)) && !Equals.matchCriteria(
-        inputWord,
-        record
-      )
+      record.word.startsWith(inputWord) && !Equals.matchCriteria(inputWord, record)
     }
     override def getMatchedRecords(inputWord: String, searchContext: SearchContext): List[InvertedIndexRecord] = {
       searchContext.records.filter(matchCriteria(inputWord, _))
@@ -50,10 +49,7 @@ object ComparisonType {
 
   case object Contains extends ComparisonType(80) {
     override def matchCriteria(inputWord: String, record: InvertedIndexRecord): Boolean = {
-      (inputWord.contains(record.word) || record.word.contains(inputWord)) && !StartsWith.matchCriteria(
-        inputWord,
-        record
-      )
+      record.word.contains(inputWord) && !StartsWith.matchCriteria(inputWord, record)
     }
     override def getMatchedRecords(inputWord: String, searchContext: SearchContext): List[InvertedIndexRecord] = {
       searchContext.records.filter(matchCriteria(inputWord, _))

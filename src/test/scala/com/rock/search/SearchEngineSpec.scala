@@ -50,7 +50,7 @@ class SearchEngineSpec extends AnyWordSpec with Matchers with EitherValues with 
       val searchContext = SearchContext(testInvertedIndex)
       val searchResult  = search(searchInput, searchContext)
 
-      searchResult.scores should
+      searchResult.fileScores should
         contain theSameElementsAs List(
           FileScore("file1", 100.0), // contains exact word: `word1`
           FileScore("file2", 100.0), // contains exact word: `word1`
@@ -66,7 +66,7 @@ class SearchEngineSpec extends AnyWordSpec with Matchers with EitherValues with 
       val searchContext = SearchContext(testInvertedIndex)
       val searchResult  = search(searchInput, searchContext)
 
-      searchResult.scores should
+      searchResult.fileScores should
         contain theSameElementsAs List(
           FileScore("file1", 90.0), // all words contains `wor`
           FileScore("file2", 90.0), // all words contains `wor`
@@ -79,7 +79,7 @@ class SearchEngineSpec extends AnyWordSpec with Matchers with EitherValues with 
       val searchContext = SearchContext(testInvertedIndex)
       val searchResult  = search(searchInput, searchContext)
 
-      searchResult.scores should
+      searchResult.fileScores should
         contain theSameElementsAs List(
           FileScore("file1", 80.0), // all words starts_with `ord`
           FileScore("file2", 80.0), // all words starts_with `ord`
@@ -92,7 +92,7 @@ class SearchEngineSpec extends AnyWordSpec with Matchers with EitherValues with 
       val searchContext = SearchContext(testInvertedIndex)
       val searchResult  = search(searchInput, searchContext)
 
-      searchResult.scores should
+      searchResult.fileScores should
         contain theSameElementsAs List(
           FileScore("file1", 0.0), // no words match `zz`
           FileScore("file2", 0.0), // no words match `zz`
@@ -105,7 +105,7 @@ class SearchEngineSpec extends AnyWordSpec with Matchers with EitherValues with 
       val searchContext = SearchContext(testInvertedIndex)
       val searchResult  = search(searchInput, searchContext)
 
-      searchResult.scores should
+      searchResult.fileScores should
         contain theSameElementsAs List(
           FileScore("file2", 100.0), // contains both words i.e (100 + 100) / 2 = 100
           FileScore("file1", 50.0),  // contains only one word i.e (100 + 0) / 2 = 50
@@ -118,7 +118,7 @@ class SearchEngineSpec extends AnyWordSpec with Matchers with EitherValues with 
       val searchContext = SearchContext(testInvertedIndex)
       val searchResult  = search(searchInput, searchContext)
 
-      searchResult.scores should
+      searchResult.fileScores should
         contain theSameElementsAs List(
           FileScore(
             "file1",

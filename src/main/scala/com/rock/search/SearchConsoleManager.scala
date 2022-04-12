@@ -17,7 +17,8 @@ object SearchConsoleManager {
       case `quitCommand` => QuitCommandReceived
       case normalInput =>
         println("") // print results in new line
-        SearchEngine.search(SearchInput(normalInput), searchContext).scores.foreach(println)
+        val searchResult = SearchEngine.search(SearchInput(normalInput), searchContext)
+        println(searchResult.formattedResult)
         SearchResultProvided
     }
   }

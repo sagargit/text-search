@@ -11,7 +11,7 @@ import java.io.{ByteArrayOutputStream, StringReader}
 class SearchConsoleItSpec extends AnyWordSpec with Matchers {
 
   "Search Console" should {
-    "successfully read search `word` as input from Console and print the results back" in {
+    "successfully read search `word` as input from Console and print the `matched` results back" in {
 
       val testInvertedIndex: List[InvertedIndexRecord] = produceInvertedIndex(testFiles)
       val searchContext: SearchContext                 = SearchContext(testInvertedIndex)
@@ -34,36 +34,60 @@ class SearchConsoleItSpec extends AnyWordSpec with Matchers {
           |search>
           |File => file2. Match Score => 100.0 %
           |File => file1. Match Score => 100.0 %
-          |File => file3. Match Score => 0.0 %
           |""".stripMargin
     }
-  }
 
-  "successfully read search `phrase` as input from Console and print the results back" in {
+    "successfully read search `phrase` as input from Console and print the `matched` results back" in {
 
-    val testInvertedIndex: List[InvertedIndexRecord] = produceInvertedIndex(testFiles)
-    val searchContext: SearchContext                 = SearchContext(testInvertedIndex)
+      val testInvertedIndex: List[InvertedIndexRecord] = produceInvertedIndex(testFiles)
+      val searchContext: SearchContext                 = SearchContext(testInvertedIndex)
 
-    val inputSearchString =
-      """|word1 d3
+      val inputSearchString =
+        """|word1 d3
       """.stripMargin
 
-    val in  = new StringReader(inputSearchString)
-    val out = new ByteArrayOutputStream()
+      val in  = new StringReader(inputSearchString)
+      val out = new ByteArrayOutputStream()
 
-    overrideInputOutputStream(out, in, searchContext)
+      overrideInputOutputStream(out, in, searchContext)
 
-    out.toString shouldBe
-      """
-        |Welcome to Search Console.
-        |Enter `:quit` to exit the Console anytime.
-        |Please enter your search input.
-        |
-        |search>
-        |File => file1. Match Score => 90.0 %
-        |File => file2. Match Score => 50.0 %
-        |File => file3. Match Score => 40.0 %
-        |""".stripMargin
+      out.toString shouldBe
+        """
+          |Welcome to Search Console.
+          |Enter `:quit` to exit the Console anytime.
+          |Please enter your search input.
+          |
+          |search>
+          |File => file1. Match Score => 90.0 %
+          |File => file2. Match Score => 50.0 %
+          |File => file3. Match Score => 40.0 %
+          |""".stripMargin
+    }
+
+    "successfully read search `word` as input from Console and print the `unmatched` result back" in {
+
+      val testInvertedIndex: List[InvertedIndexRecord] = produceInvertedIndex(testFiles)
+      val searchContext: SearchContext                 = SearchContext(testInvertedIndex)
+
+      val inputSearchString =
+        """|xyz
+      """.stripMargin
+
+      val in  = new StringReader(inputSearchString)
+      val out = new ByteArrayOutputStream()
+
+      overrideInputOutputStream(out, in, searchContext)
+
+      out.toString shouldBe
+        """
+          |Welcome to Search Console.
+          |Enter `:quit` to exit the Console anytime.
+          |Please enter your search input.
+          |
+          |search>
+          |0 records matched
+          |""".stripMargin
+    }
   }
 
   /**

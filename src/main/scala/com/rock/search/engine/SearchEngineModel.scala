@@ -15,7 +15,18 @@ final case class RecordComparisonScore(comparedRecord: InvertedIndexRecord, scor
 
 final case class SearchContext(records: List[InvertedIndexRecord]) extends SearchEngineModel
 
-final case class SearchResult(scores: List[FileScore]) extends SearchEngineModel
+final case class SearchResult(fileScores: List[FileScore]) extends SearchEngineModel {
+  private val noMatchScore = 0.0
+  private def hasNoMatch(fileScore: FileScore): Boolean = {
+    fileScore.score == noMatchScore
+  }
+  def formattedResult: String = {
+    if (fileScores.forall(hasNoMatch)) "0 records matched"
+    else {
+      fileScores.filterNot(hasNoMatch).map(_.toString).mkString("\n")
+    }
+  }
+}
 
 final case class WordComparisonScores(inputWord: String, recordScores: List[RecordComparisonScore])
     extends SearchEngineModel {
